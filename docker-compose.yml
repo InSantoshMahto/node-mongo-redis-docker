@@ -1,0 +1,27 @@
+version: "3"
+services:
+  api:
+    container_name: cp-api
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      MONGO_URI: mongodb://mongo/docker
+      REDIS_HOST: redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  mongo:
+    container_name: cp-mongo
+    image: mongo:4.4.9-rc0-focal
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27027:27017"
+  redis:
+    container_name: cp-redis
+    image: redis:alpine3.14

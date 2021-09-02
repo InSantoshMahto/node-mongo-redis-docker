@@ -1,0 +1,5 @@
+{
+  "cSpell.words": ["fastify", "paren"],
+  "files.autoSave": "onFocusChange",
+  "editor.formatOnSave": true
+}
