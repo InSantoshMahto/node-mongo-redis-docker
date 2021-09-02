@@ -12,41 +12,45 @@ fastify.register(mongodb, {
   // force to close the mongodb connection when app stopped
   // the default value is false
   forceClose: true,
-  url: process.env.MONGO_URI
+  url: process.env.MONGO_URI,
 })
 
 // register redis
 fastify.register(redis, {
-  host: process.env.REDIS_HOST
+  host: process.env.REDIS_HOST,
 })
 
-fastify.get('/', {
-  schema: {
-    response: {
-      200: {
-        type: 'object',
-        properties: {
-          pong: {
-            type: 'string'
-          }
-        }
+fastify.get(
+  '/',
+  {
+    schema: {
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            pong: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
+  },
+  async (request, reply) => {
+    fastify.redis.get('hits', async (error, value) => {
+      if (error) {
+        reply.status(StatusCodes.BAD_REQUEST)
+        return { error }
       }
-    }
+      const hits = await fastify.mongo.db.collection('hits').find({}).toArray()
+      return { hits }
+    })
   }
-}, async (request, reply) => {
-  fastify.redis.get('hits', async (error, value) => {
-    if (error) {
-      reply.status(StatusCodes.BAD_REQUEST)
-      return { error }
-    }
-    const hits = await fastify.mongo.db.collection('hits').find({}).toArray()
-    return { hits }
-  })
-})
+)
 
 const start = async () => {
   try {
-    await fastify.listen(+(process.env.PORT), process.env.HOST)
+    await fastify.listen(+process.env.PORT, process.env.HOST)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)

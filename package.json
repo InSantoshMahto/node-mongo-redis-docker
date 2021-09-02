@@ -8,12 +8,11 @@
   },
   "description": "learn node js and mongodb with docker",
   "type": "module",
-  "packageManager": "yarn@3.0.1",
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "test": "mocha",
     "format": "prettier --write .",
-    "lint": "eslint --fix .",
+    "lint": "eslint --fix --cache=true .",
     "prepare": "husky install"
   },
   "dependencies": {
