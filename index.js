@@ -12,12 +12,12 @@ fastify.register(mongodb, {
   // force to close the mongodb connection when app stopped
   // the default value is false
   forceClose: true,
-  url: process.env.MONGO_URI,
+  url: process.env.MONGO_URI
 })
 
 // register redis
 fastify.register(redis, {
-  host: process.env.REDIS_HOST,
+  host: process.env.REDIS_HOST
 })
 
 fastify.get(
@@ -29,12 +29,12 @@ fastify.get(
           type: 'object',
           properties: {
             pong: {
-              type: 'string',
-            },
-          },
-        },
-      },
-    },
+              type: 'string'
+            }
+          }
+        }
+      }
+    }
   },
   async (request, reply) => {
     fastify.redis.get('hits', async (error, value) => {
